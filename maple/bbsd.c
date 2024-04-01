@@ -1176,7 +1176,7 @@ tn_main(void)
 #if 0
     sprintf(buf, BBSHOME "/gem/@/@close");
     more(buf, (char *) -1);
-    login_abort("\n夢之大地主機搬遷中...");
+    login_abort("\n" BOARDNAME "主機搬遷中...");
     return;
     sleep(10);
     login_abort("\n");

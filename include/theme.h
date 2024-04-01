@@ -263,7 +263,7 @@
 #define ORIGIN_TAG_PIC \
     "\x1b[1;44;32m  ¢¨\x1b[0;32;44m¢©   \x1b[1;37m¡_¡_     \x1b[30m¢i¢v¢© ¢i¢v¢i ¢i¢v¢v ¢i¢v¢i ¢i¢g¢p ¢i   ¢i¢v¢i ¢i¢©¢i ¢i¢v\x1b[31m¡´ \x1b[m\n" \
     "\x1b[1;32;44m¢¨\x1b[42m¢«\x1b[0;44;32m¢i¢©\x1b[1m¢¨\x1b[0;32;44m¢© \x1b[1;37m¡_¡_ \x1b[0;37;44m¢i  ¢i ¢i¢b¢« ¢i¢b¢b ¢i¢b¢i ¢p¢p¢p ¢i   ¢i¢b¢i ¢i¢ª¢i ¢i  ¢i \x1b[m\n" \
-    "\x1b[1;36;42m¹Ú¤§¤j¦a ¹G¹G£°¥| \x1b[37m¢i¢b¢« ¢i  ¢i ¢i¢b¢b ¢i  ¢i ¢p¢p¢p ¢i¢b ¢i  ¢i ¢i  ¢i ¢i¢b¢« \x1b[m\n"
+    "\x1b[1;36;42m" BOARDNAME " ¹G¹G£°¥| \x1b[37m¢i¢b¢« ¢i  ¢i ¢i¢b¢b ¢i  ¢i ¢p¢p¢p ¢i¢b ¢i  ¢i ¢i  ¢i ¢i¢b¢« \x1b[m\n"
 #endif
 
 /* `ORIGIN_TAG_SITENAME` should start and end with a space after excluding ANSI escapes */

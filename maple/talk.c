@@ -1751,7 +1751,7 @@ static void bmw_display(int max, int pos)
     clrtobot();
     i++;
     move(i, 0);
-    prints(" \x1b[1;36m╓──────╢\x1b[43;37m              夢大超炫水球回顧              \x1b[40;36m╟──────╖\x1b[m");
+    prints(" \x1b[1;36m╓──────╢\x1b[43;37m              " NICKNAME "超炫水球回顧              \x1b[40;36m╟──────╖\x1b[m");
 
     i++;
     for (max=0; max<8; max++)
