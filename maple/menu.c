@@ -18,7 +18,7 @@
 #define STUDENT_HAVE    "1Student  【 \x1b[41;33;1;5m快進來看看\x1b[m 】"
 #endif
 
-#define GOODBYE_EXIT    "Goodbye   【再別" BOARDNAME "】"
+#define GOODBYE_EXIT    "Goodbye   【再別%s】"
 #define GOODBYE_GOBACK  "GoBack    【 回上層選單 】"
 
 #define MENU_HELP       NULL
@@ -721,7 +721,7 @@ INTERNAL_INIT MENU menu_talk[] =
 
     /* Thor.990220: chatroom client 改採外掛 */
     {{.dl = {DL_NAME("chat.so", t_chat)}}, PERM_CHAT, M_DL(M_CHAT),
-    "ChatRoom   " NICKNAME CHATROOMNAME},
+    "ChatRoom   %.0s%s" CHATROOMNAME},
 
     {{t_recall}, PERM_BASIC, M_XMODE,
     "Write      回顧前幾次熱訊"},
@@ -771,7 +771,7 @@ INTERNAL_INIT MENU menu_information[] =
 INTERNAL_INIT MENU menu_xyz[] =
 {
     {{.menu = menu_information}, 0, M_XMENU,
-    "Tops       " NICKNAME "排行榜"},
+    "Tops       %.0s%s" "排行榜"},
 
     {{FUNCARG(menumore, FN_ETC_VERSION)}, 0, M_READA | M_ARG,
     "Version    源碼發展資訊"},
@@ -870,7 +870,7 @@ INTERNAL MENU menu_service[];
 INTERNAL_INIT MENU menu_game[] =
 {
     {{.dl = {DL_NAME("bj.so", BlackJack)}}, PERM_VALID, M_DL(M_XMODE),
-    "BlackJack  " NICKNAME "黑傑克"},
+    "BlackJack  %.0s%s黑傑克"},
 
     {{.dl = {DL_NAME("guessnum.so", fightNum)}}, PERM_VALID, M_DL(M_XMODE),
     "FightNum   數字大決戰"},
@@ -879,10 +879,10 @@ INTERNAL_INIT MENU menu_game[] =
     "GuessNum   傻瓜猜數字"},
 
     {{.dl = {DL_NAME("mine.so", Mine)}}, PERM_VALID, M_DL(M_XMODE),
-    "Mine       " NICKNAME "踩地雷"},
+    "Mine       %.0s%s踩地雷"},
 
     {{.dl = {DL_NAME("pip.so", p_pipple)}}, PERM_VALID, M_DL(M_XMODE),
-    "Pip        " NICKNAME "戰鬥雞"},
+    "Pip        %.0s%s戰鬥雞"},
 
     {{.menu = menu_service}, PERM_MENU + 'F', M_UMENU,
     "遊戲休閒"}
@@ -986,7 +986,7 @@ INTERNAL_INIT MENU menu_service[] =
 #endif
 */
     {{.menu = menu_main}, PERM_MENU + 'U', M_UMENU,
-     NICKNAME "服務"},
+     "%.0s%s服務"},
 };
 
 #ifdef __cplusplus
@@ -1069,7 +1069,7 @@ INTERNAL_INIT MENU menu_main[] =
     "Talk      【 休閒聊天區 】"},
 
     {{.menu = menu_service}, PERM_BASIC, M_XMENU,
-    "DService  【 " NICKNAME "服務區 】"},
+    "DService  【 %.0s%s服務區 】"},
 
     /* lkchu.990428: 不要都塞在個人工具區 */
     {{.menu = menu_xyz}, 0, M_SMENU,
@@ -1301,7 +1301,9 @@ domenu_item(
     DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
     char item[ANSILINESIZE];
     const MENU *const mptr = xyz->table[pos];
-    const char *const str = check_info((const void *)mptr->item.func, mptr->desc);
+    const char *const str_fmt = check_info((const void *)mptr->item.func, mptr->desc);
+    char str[96];
+    snprintf(str, sizeof(str), str_fmt, str_site, str_site_nick);
     const int item_str_len = strcspn(str, "\n");
     const int match_max = BMIN(xyz->cmdcur_max, item_str_len);
     const int y = domenu_gety(pos, xyz);
@@ -1400,7 +1402,10 @@ domenu_redo_reload:
         xyz->max_prev = xo->max;
 
         clear();
-        vs_head(xyz->mtail->desc, NULL);
+        const char *const desc_fmt = xyz->mtail->desc;
+        char desc[96];
+        snprintf(desc, sizeof(desc), desc_fmt, str_site, str_site_nick);
+        vs_head(desc, NULL);
         //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
     }
     if (cmd & XR_PART_NECK)
@@ -1456,7 +1461,9 @@ domenu_redo_reload:
     if (cmd & XR_PART_KNEE)
     {
         const MENU *const mptr = xyz->table[xo->pos[xo->cur_idx]];
-        const char *const desc = check_info((const void *)mptr->item.func, mptr->desc);
+        const char *const desc_fmt = check_info((const void *)mptr->item.func, mptr->desc);
+        char desc[96];
+        snprintf(desc, sizeof(desc), desc_fmt, str_site, str_site_nick);
         const char *explan = strchr(desc, '\n');
         if (!explan)
             explan = strchr(xyz->mtail->desc, '\n');
