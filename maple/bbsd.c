@@ -1221,7 +1221,7 @@ tn_main(void)
     //getloadavg(load, 3);
     prints( MYHOSTNAME " ◇ " OWNER " ◇ " BBSIP " [" BBSVERNAME " " BBSVERSION "]");
     move(1, 0);
-    prints("舧羬\x1b[1;33;46m %s \x1b[m╰参璽更%.2f %.2f %.2f / %ld [%s] 絬计 [%d/%d]",
+    prints("舧羬\x1b[1;33;46m %s \x1b[m ╰参璽更 %.2f %.2f %.2f /%ld [%s] 絬计 [%d/%d]",
         str_site, load[0], load[1], load[2], nproc, load_norm>5?"\x1b[1;37;41m筁蔼\x1b[m":load_norm>1?"\x1b[1;37;42m熬蔼\x1b[m":"\x1b[1;37;44mタ盽\x1b[m", ushm->count, MAXACTIVE);
 
     move(2, 0);
