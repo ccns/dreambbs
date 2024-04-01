@@ -149,12 +149,16 @@ draw_vote(
     for (num = 0; num < items; num++)
     {
         ticket = choice[num].count;
+        const char *item_off = choice[num].vitem;
+        const char *item = str_chr_next_or(item_off, '\n', item_off);
+        int space = 42;
+        space -= fprintf(fp, "\t%.*s", INT(strcspn(item, "\n")), item);
+        if (item != item_off)
+            space -= fprintf(fp, " \x1b[30m(%.*s)\x1b[m", INT(strcspn(item_off, "\n")), item_off) - 8;
+        fprintf(fp, "%*s%3d ²¼", BMAX(0, space), "", ticket);
         if (fd)
-            fprintf(fp, "\t%-42s%3d ²¼ (%4.1f%%)\n",
-                (char *)choice[num].vitem, ticket, 100.0 * ticket / fd);
-        else
-            fprintf(fp, "\t%-42s%3d ²¼\n",
-                (char *)choice[num].vitem, ticket);
+            fprintf(fp, " (%4.1f%%)", 100.0 * ticket / fd);
+        fprintf(fp, "\n");
     }
 
     /* other opinions */
