@@ -1160,9 +1160,6 @@ tn_main(void)
     while (igetch() != I_TIMEOUT);
     add_io(0, 60);
 
-
-    clear();
-
     /* IID.2024-04-01: random site name */
     static const char* const boardname_list[] = BOARDNAME_LIST;
     static const char* const nickname_list[COUNTOF(boardname_list)] = NICKNAME_LIST;
@@ -1175,6 +1172,15 @@ tn_main(void)
 
     str_site = boardname_list[idx_site_name];
     str_site_nick = nickname_list[idx_site_name];
+
+    /* IID.2024-04-01: set terminal title */
+    char ansi_cmd[24];
+    /* OSC 2 ; Pt ST: Change Window Title to Pt
+     * CSI 2 J: Erase All */
+    const size_t len_ansi_cmd = sprintf(ansi_cmd, "\x1b]2;%s\a\x1b[2J", str_site);
+    send(0, ansi_cmd, len_ansi_cmd, 0);
+
+    clear();
 
 /*cache.080510: --維修用, 開站時要記得設定這段變成註解--*/
 /*cache.080714: power user 可以輸入busy開啟login畫面測試*/
