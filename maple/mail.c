@@ -924,7 +924,7 @@ m_zip(void)                     /* itoc.010228: 打包資料 */
     sprintf(buf, "確定要打包 %s %s嗎(y/N)？[N] ", name, item);
     if (vans(buf) == 'y')
     {
-        sprintf(buf, "【" BOARDNAME "】%s %s", name, item);
+        sprintf(buf, "【%s】%s %s", str_site, name, item);
         do_forward(buf, ans);
     }
 

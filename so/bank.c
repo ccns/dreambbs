@@ -357,7 +357,9 @@ int bank_main(void)
 
     move(0, 0);
     prints("\x1b[1;33;42m");
-    vs_mid(BOARDNAME "    銀行");
+    char vs_mid_str[24];
+    sprintf(vs_mid_str, "%s    銀行", str_site);
+    vs_mid(vs_mid_str);
     prints("\n");
     move(10, 0);
     prints("  您的帳號資訊如下    １. 用優良點數換取夢幣\n\n");

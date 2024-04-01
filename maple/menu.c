@@ -112,7 +112,7 @@ pad_view(void)
 
     clear();
     move(0, 23);
-    outs("\x1b[1;37;45m ●  " BOARDNAME " 留 言 板  ● \x1b[m\n\n");
+    prints("\x1b[1;37;45m ●  %s 留 言 板  ● \x1b[m\n\n", str_site);
     count = 0;
 
     mgets(-1);
@@ -221,13 +221,15 @@ goodbye(void)
         return QUIT;
 
     bmw_save();
+    char vans_str[64];
+    sprintf(vans_str, "G)再別%s M)報告站長 N)留言板 Q)取消？[Q] ", str_site_nick);
     if (cuser.ufo2 & UFO2_DEF_LEAVE)
     {
-        if (!(ans = vans("G)再別" NICKNAME " M)報告站長 N)留言板 Q)取消？[Q] ")))
+        if (!(ans = vans(vans_str)))
             ans = 'q';
     }
     else
-        ans = vans("G)再別" NICKNAME " M)報告站長 N)留言板 Q)取消？[Q] ");
+        ans = vans(vans_str);
 
     switch (ans)
     {

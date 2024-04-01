@@ -197,12 +197,15 @@ static void pip_new_game(void)
     struct tm *ptime;
     ptime = localtime(&now);
 
+    char vs_head_str[24];
+    sprintf(vs_head_str, "%s" PIPNAME, str_site_nick);
+
     if (d.death == 1 && !(!d.name[0]))
     {
         clear();
-        vs_head(NICKNAME PIPNAME, BoardName);
+        vs_head(vs_head_str, BoardName);
         move(4, 6);
-        outs("歡迎來到 \x1b[1;5;33m" NICKNAME "生物科技研究院\x1b[0m");
+        prints("歡迎來到 \x1b[1;5;33m%s生物科技研究院\x1b[0m", str_site_nick);
         move(6, 6);
         outs("經我們調查顯示  先前你有養過小雞喔  可是被你養死了...");
         move(8, 6);
@@ -226,7 +229,7 @@ static void pip_new_game(void)
     if (d.death != 0 || !d.name[0])
     {
         clear();
-        vs_head(NICKNAME PIPNAME, BoardName);
+        vs_head(vs_head_str, BoardName);
         /*小雞命名*/
         getdata(2, 0, "幫小雞取個好聽的名字吧(請不要有空格): ", buf, 11, DOECHO, 0);
         if (!buf[0])
@@ -243,7 +246,7 @@ static void pip_new_game(void)
             d.sex = 2;
         }
         move(6, 3);
-        outs(NICKNAME PIPNAME "的遊戲現今分成兩種玩法");
+        prints("%s" PIPNAME "的遊戲現今分成兩種玩法", str_site_nick);
         move(7, 3);
         outs("選有結局會在小雞20歲時結束遊戲，並告知小雞後續的發展");
         move(8, 3);
@@ -350,7 +353,9 @@ int mode)
         show_die_pic(2);
         move(14, (d_cols>>1) + 20);
         prints("可憐的小雞\x1b[1;31m%s\x1b[m", msg);
-        vmsg(NICKNAME "哀悼中....");
+        char vmsg_str[24];
+        sprintf(vmsg_str, "%s哀悼中....", str_site_nick);
+        vmsg(vmsg_str);
     }
     else if (mode == 2)
     {
@@ -667,10 +672,10 @@ enum pipmenuidx menunum)
             switch (menunum)
             {
             case 2:
-                fill = 20 + d_cols - STRLITLEN_INT(NICKNAME);
+                fill = 20 + d_cols - INT(strlen(str_site_nick));
                 break;
             case 6:
-                fill = 20 + d_cols - 2 * STRLITLEN_INT(NICKNAME);
+                fill = 20 + d_cols - 2 * INT(strlen(str_site_nick));
                 break;
             default:
                 fill = d_cols;
@@ -1194,11 +1199,11 @@ enum pipmenumode mode)
     /*vs_head("電子養小雞", BoardName);*/
     move(0, 0);
     if (d.sex == 1)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+        prints("\x1b[1;41m  %s" PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s      %*s\x1b[m", str_site_nick, d.chickenmode ? "二" : "一", d.name, 40 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
     else if (d.sex == 2)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+        prints("\x1b[1;41m  %s" PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s      %*s\x1b[m", str_site_nick, d.chickenmode ? "二" : "一", d.name, 40 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
     else
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+        prints("\x1b[1;41m  %s" PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s      %*s\x1b[m", str_site_nick, d.chickenmode ? "二" : "一", d.name, 40 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
 
     move(1, 0);
     static const enum pip_stat stats0[] = {STAT_M_MONEY};
@@ -3602,7 +3607,7 @@ static int pip_play_outing(void)       /*郊遊*/
         {
             lucky = 0;
             clear();
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ %-10s                                                  \x1b[0m", d.name);
+            prints("\x1b[1;41m  %s" PIPNAME " ～ %-10s                                                  \x1b[0m", str_site_nick , d.name);
             show_play_pic(0);
             move(b_lines - 6, (d_cols>>1) + 10);
             prints("\x1b[1;36m親愛的 \x1b[1;33m%s ～\x1b[0m", d.name);
@@ -4601,7 +4606,7 @@ pip_go_palace(void)
         clrtoeol();
         move(b_lines, 0);
         prints(
-            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部       %*s\x1b[0m", 20 + d_cols - STRLITLEN_INT(NICKNAME), "");
+            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開%s" "總司令部       %*s\x1b[0m", str_site_nick , 20 + d_cols - INT(strlen(str_site_nick)), "");
         pipkey = vkey();
         choice = pipkey - 'A';
         if (choice < 0 || choice >= ROYAL_COUNT)
@@ -4714,7 +4719,9 @@ pip_go_palace(void)
             d.royal[i] = save[i];
     } while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
-    vmsg("離開" NICKNAME "總司令部.....");
+    char vmsg_str[32];
+    sprintf(vmsg_str, "離開%s總司令部.....", str_site_nick);
+    vmsg(vmsg_str);
     return 0;
 }
 /*--------------------------------------------------------------------------*/
@@ -5269,7 +5276,7 @@ pip_ending_screen(void)
     move(6, (d_cols>>1) + 9);
     outs("\x1b[1;35m╚═══╝╚═╰═╝╚═══╯╚═══╝╚═╰═╝╰═══╯\x1b[0m");
     move(b_lines - 16, (d_cols>>1) + 8);
-    outs("\x1b[1;31m──────────\x1b[41;37m " NICKNAME PIPNAME "結局報告 \x1b[0;1;31m──────────\x1b[0m");
+    prints("\x1b[1;31m──────────\x1b[41;37m %s" PIPNAME "結局報告 \x1b[0;1;31m──────────\x1b[0m", str_site_nick);
     move(b_lines - 14, (d_cols>>1) + 10);
     outs("\x1b[1;36m這個時間不知不覺地還是到臨了...\x1b[0m");
     move(b_lines - 12, (d_cols>>1) + 10);
@@ -5285,7 +5292,7 @@ pip_ending_screen(void)
     vmsg("接下來看未來發展");
     clrchyiuan(b_lines - 16, b_lines - 4);
     move(b_lines - 16, (d_cols>>1) + 8);
-    outs("\x1b[1;34m──────────\x1b[44;37m " NICKNAME PIPNAME "未來發展 \x1b[0;1;34m──────────\x1b[0m");
+    prints("\x1b[1;34m──────────\x1b[44;37m %s" PIPNAME "未來發展 \x1b[0;1;34m──────────\x1b[0m", str_site_nick);
     move(b_lines - 14, (d_cols>>1) + 10);
     prints("\x1b[1;36m透過水晶球，讓我們一起來看 \x1b[33m%s\x1b[36m 的未來發展吧.....\x1b[0m", d.name);
     move(b_lines - 12, (d_cols>>1) + 10);
@@ -6048,7 +6055,7 @@ int endgrade)
     clrchyiuan(1, b_lines);
     gradeall = gradebasic + endgrade;
     move(8, (d_cols>>1) + 17);
-    outs("\x1b[1;36m感謝您玩完整個" NICKNAME "小雞的遊戲.....\x1b[0m");
+    prints("\x1b[1;36m感謝您玩完整個%s小雞的遊戲.....\x1b[0m", str_site_nick);
     move(10, (d_cols>>1) + 17);
     outs("\x1b[1;37m經過系統計算的結果：\x1b[0m");
     move(12, (d_cols>>1) + 17);
@@ -6764,11 +6771,11 @@ int mode)
         /*vs_head("電子養小雞", BoardName);*/
         move(0, 0);
         if (d.sex == 1)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+            prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", str_site_nick, d.name, 50 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
         else if (d.sex == 2)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+            prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", str_site_nick, d.name, 50 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
         else
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+            prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", str_site_nick, d.name, 50 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
         move(6, 0);
         if (mode == 1)
             show_badman_pic(m.map/*n*/);
@@ -6990,11 +6997,11 @@ int mode)
         clear();
         move(0, 0);
         if (d.sex == 1)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+            prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", str_site_nick, d.name, 50 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
         else if (d.sex == 2)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+            prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", str_site_nick, d.name, 50 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
         else
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+            prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", str_site_nick, d.name, 50 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
         move(1, 0);
         prints_centered("\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
         move(2, 0);
@@ -7948,11 +7955,11 @@ int mode)
     clear();
     move(0, 0);
     if (d.sex == 1)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+        prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[0m", str_site_nick, d.name, 55 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
     else if (d.sex == 2)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+        prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[0m", str_site_nick, d.name, 55 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
     else
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
+        prints("\x1b[1;41m  %s" PIPNAME " ～ \x1b[34m？ \x1b[37m%-15s     %*s\x1b[0m", str_site_nick, d.name, 55 + d_cols - INT(strlen(str_site_nick)) - STRLITLEN_INT(PIPNAME), "");
 
     move(1, 0);
     static const enum pip_stat stats0[] = {STAT_M_MONEY};

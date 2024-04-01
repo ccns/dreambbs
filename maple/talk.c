@@ -1751,7 +1751,7 @@ static void bmw_display(int max, int pos)
     clrtobot();
     i++;
     move(i, 0);
-    prints(" \x1b[1;36m╓──────╢\x1b[43;37m              " NICKNAME "超炫水球回顧              \x1b[40;36m╟──────╖\x1b[m");
+    prints(" \x1b[1;36m╓──────╢\x1b[43;37m              %s超炫水球回顧              \x1b[40;36m╟──────╖\x1b[m", str_site_nick);
 
     i++;
     for (max=0; max<8; max++)
@@ -2123,7 +2123,7 @@ aloha(void)
         /* benz.sender = cuser.userno; */
         benz.sender = 0; /* Thor.980805: 系統協尋為單向 call in */
         strcpy(benz.userid, cuser.userid);
-        sprintf(benz.msg, "◎ 進 入 (%s) 囉!! ◎", BOARDNAME);
+        sprintf(benz.msg, "◎ 進 入 (%s) 囉!! ◎", str_site);
 
         ubase = ushm->uslot;
         uceil = ubase + ushm->ubackidx;
@@ -2216,7 +2216,7 @@ loginNotify(void)
         /* benz.sender = cuser.userno; */
         benz.sender = 0; /* Thor.980805: 系統協尋為單向 call in */
         strcpy(benz.userid, cuser.userid);
-        sprintf(benz.msg, "◎ 剛剛踏進%s的門 [系統協尋] ◎", BOARDNAME);
+        sprintf(benz.msg, "◎ 剛剛踏進%s的門 [系統協尋] ◎", str_site);
 
         ubase = ushm->uslot;
         uceil = ubase + ushm->ubackidx;

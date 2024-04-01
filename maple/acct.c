@@ -1471,7 +1471,9 @@ int u_lock(void)
 
     clear();
     prints("\x1b[1;44;33m");
-    vs_mid(BOARDNAME "    ¶¢¸m/Âê©wª¬ºA");
+    const char vs_mid_str[32];
+    sprintf(vs_mid_str, "%s    ¶¢¸m/Âê©wª¬ºA", str_site);
+    vs_mid(vs_mid_str);
     move(4, 6);
     prints("¶¢¸m¤¤¡G%s", cutmp->mateid);
     if (buf[0] == 'y' || buf[0] == 'Y')
