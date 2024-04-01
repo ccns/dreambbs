@@ -207,7 +207,11 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
         }
         move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) >> 1));
         if (perms[i])
-            prints("%c %s %s", radix32[i], msg, perms[i]);
+        {
+            /* Format of perms[i]: "<off-state>\n<on-state>" or "<both-state>" */
+            const char *const str_perm = (pbits & j) ? str_chr_next_or(perms[i], '\n', perms[i]) : perms[i];
+            prints("%c %s %.*s", radix32[i], msg, INT(strcspn(str_perm, "\n")), str_perm);
+        }
         else
             prints("\x1b[1;30m%c\x1b[m", radix32[i]);
         j <<= 1;
@@ -238,6 +242,13 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             pbits ^= j;
             move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) >> 1) + 2);
             outs(msg);
+            /* Format of perms[i]: "<off-state>\n<on-state>" or "<both-state>" */
+            const char *const str_on = str_chr_next_or(perms[i], '\n', NULL);
+            if (str_on) {
+                const char *const str_perm = (pbits & j) ? str_on : perms[i];
+                const char *const str_other = (pbits & j) ? perms[i] : str_on;
+                prints(" %-*.*s", INT(strlen(str_other)), INT(strcspn(str_perm, "\n")), str_perm);
+            }
         }
     }
     return (pbits);
