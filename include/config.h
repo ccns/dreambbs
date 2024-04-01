@@ -23,8 +23,16 @@
 #define BOARDNAME       "夢之大地"                  /* 中文站名 */
 #endif
 
+#ifndef BOARDNAME_LIST
+#define BOARDNAME_LIST  {"夢之大地"}
+#endif
+
 #ifndef NICKNAME
 #define NICKNAME        "夢大"                      /* 中文簡稱 */
+#endif
+
+#ifndef NICKNAME_LIST
+#define NICKNAME_LIST   {"夢大"}                    /* should contains the same number of elements as BOARDNAME_LIST */
 #endif
 
 #ifndef OWNER

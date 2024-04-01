@@ -580,8 +580,6 @@ utmp_setup(
 
     strcpy(utmp.userid, cuser.userid);
     time32(&utmp.idle_time);
-    srand(time(0));
-    srandom(time(0));
     strcpy(utmp.username, ((!str_casecmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
     str_scpy(utmp.from, fromhost, sizeof(utmp.from));
@@ -1164,6 +1162,20 @@ tn_main(void)
 
 
     clear();
+
+    /* IID.2024-04-01: random site name */
+    static const char* const boardname_list[] = BOARDNAME_LIST;
+    static const char* const nickname_list[COUNTOF(boardname_list)] = NICKNAME_LIST;
+    uint32_t seed = 0;
+    if (!getrandom_bytes((char *)&seed, sizeof(seed)))
+        seed = time(0) ^ getpid();
+    srand(seed);
+    srandom(seed);
+    const size_t idx_site_name = random() % COUNTOF(boardname_list);
+
+    str_site = boardname_list[idx_site_name];
+    str_site_nick = nickname_list[idx_site_name];
+
 /*cache.080510: --維修用, 開站時要記得設定這段變成註解--*/
 /*cache.080714: power user 可以輸入busy開啟login畫面測試*/
 #if 0

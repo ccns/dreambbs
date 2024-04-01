@@ -102,8 +102,8 @@ VAR const char *const str_post1       INI(STR_POST1);
 VAR const char *const str_post2       INI(STR_POST2);
 VAR const char *const str_host        INI(MYHOSTNAME);
 
-VAR const char *const str_site        INI(BOARDNAME);
-VAR const char *const str_site_nick   INI(NICKNAME);
+VAR const char *str_site              INI(BOARDNAME);
+VAR const char *str_site_nick         INI(NICKNAME);
 
 /* Colors for cursors not on the current cursor position */
 VAR const char *const str_cur_color[XO_NCUR][1 << XO_NCUR] INI({
