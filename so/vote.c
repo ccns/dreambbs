@@ -417,8 +417,23 @@ vitem_t vlist[])
         for (;;)
         {
             buf[0] = radix32[item];
+            /* filter out on-state texts */
+            char *const delim = memchr(vlist[item], '\n', sizeof(vitem_t));
+            if (delim) {
+                *delim = '\0';
+            }
+            /* default text */
             if (!vget((item % 16U) + 3, (item / 16) * 40,
-                      buf, vlist[item], sizeof(vitem_t), GCARRY) || (++item >= MAX_CHOICES))
+                      buf, vlist[item], sizeof(vitem_t), GCARRY))
+                break;
+            /* on-state text (SysOp-only) */
+            const size_t len = strlen(vlist[item]) + 1;
+            if (HAS_PERM(PERM_SYSOP) && sizeof(vitem_t) - len > 0)
+                if (vget((item % 16U) + 3, strlen(buf) - 1 + (item / 16) * 40 + len,
+                  ">", vlist[item] + len, sizeof(vitem_t) - len, DOECHO))
+                    vlist[item][len - 1] = '\n';
+
+            if (++item >= MAX_CHOICES)
                 break;
         }
         if (vans("是否重新輸入選項(y/N)[N] ") != 'y')
