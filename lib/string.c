@@ -115,6 +115,17 @@ GCC_PURE int str_casecmp_dbcs(const char *s1, const char *s2)
     }
 }
 
+/* Returns the pointer to next character of the first `delim` in `str`
+ * Returns `dflt` if `delim` is not in `str` */
+GCC_NONNULL(1)
+GCC_PURE char *str_chr_next_or(const char *str, char delim, const char *dflt)
+{
+    if (delim == '\0')
+        return dflt;
+    const char *const pdelim = strchr(str, delim);
+    return !pdelim ? dflt : (char *)pdelim + 1;
+}
+
 /* Split string `src` with spaces and copy the first line of the second splitted item to `dst` (formerly `str_cut`) */
 GCC_NONNULLS
 void str_split_2nd(char *dst, const char *src)

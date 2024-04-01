@@ -154,6 +154,7 @@ GCC_NONNULLS void str_ansi(char *dst, const char *str, int max);
 GCC_NONNULLS void str_cat(char *dst, const char *s1, const char *s2);
 GCC_NONNULLS GCC_PURE int str_casecmp(const char *s1, const char *s2);
 GCC_NONNULLS GCC_PURE int str_casecmp_dbcs(const char *s1, const char *s2);
+GCC_NONNULL(1) GCC_PURE char *str_chr_next_or(const char *str, char delim, const char *dflt);
 GCC_NONNULLS void str_split_2nd(char *dst, const char *src);
 GCC_NONNULLS GCC_PURE enum DbcsState dbcs_state(const char *str, size_t idx);
 GCC_NONNULLS GCC_PURE enum DbcsState dbcs_nstate(const char *str GCC_NONSTRING, size_t idx, size_t len);
