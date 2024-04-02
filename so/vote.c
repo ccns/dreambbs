@@ -1157,8 +1157,13 @@ XO *xo)
     char fpath[32];
 
     /* 有 post 權利的才能參加投票 */
+    /* IID.2024-04-02: allow all non-guest to vote in BRD_ANNOUNCE */
 
-    if (!(bbstate & STAT_POST) || !cuser.userlevel)
+    if (!(
+            (bbstate & STAT_POST)
+            || (bbsmode == M_READA && strcmp(currboard, BRD_ANNOUNCE) == 0)
+        ) || !cuser.userlevel
+        )
         return DL_RELEASE(XO_NONE);
 
     setdirpath(fpath, xo->dir, FN_VCH);
