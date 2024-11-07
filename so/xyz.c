@@ -17,6 +17,62 @@
 
 /* cache.081017:系統資訊 */
 
+
+static int
+siteinfo_goodbye(void)
+{
+    char ans;
+
+    bmw_save();
+    char vans_str[64];
+    sprintf(vans_str, "G)再別%s Q)取消？[Q] ", str_site_nick);
+    if (cuser.ufo2 & UFO2_DEF_LEAVE)
+    {
+        if (!(ans = vans(vans_str)))
+            ans = 'q';
+    }
+    else
+        ans = vans(vans_str);
+
+    switch (ans)
+    {
+    case 'g':
+    case 'y':
+        break;
+
+    case 'q':
+    default: /* 090911.cache: 不小心按錯不要趕走人家 ;( */
+        return XEASY;
+    }
+
+    clear();
+    prints("       \x1b[1;31m ●       \x1b[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\x1b[m\n"
+        "      \x1b[1;31m●\x1b[1;37m○\x1b[1;33m●\x1b[1;37m═══\x1b[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\x1b[1;37m════\x1b[m\n"
+        "       \x1b[1;33m ●        \x1b[1;34m└─┤└─┘└─┘└─╯ └─╯ └┘ └─┘\x1b[m\n");
+    prints("Dear \x1b[32m%s(%s)\x1b[m，別忘了再度光臨【 %s 】\n"
+        "以下是您在站內的註冊資料:\n",
+        cuser.userid, cuser.username, str_site);
+    acct_show(&cuser, 3);
+    vmsg_body(NULL);
+    u_exit("EXIT ");
+    vkey();
+    exit(0);
+
+    return QUIT;
+}
+
+
+#define GOODBYE_EXIT    "Goodbye   【再別%s】"
+
+static MENU menu_siteinfo[] =
+{
+    {{siteinfo_goodbye}, 0, M_XMODE,
+    GOODBYE_EXIT},
+
+    {{NULL}, PERM_MENU + 'G', M_MMENU,
+    "主功\能表"},
+};
+
 int
 x_siteinfo(void)
 {
@@ -78,6 +134,29 @@ x_siteinfo(void)
 #else
 //    prints("\x1b[1;30mModules & Plug-in: None\x1b[m\n");
 #endif  /* #ifdef Modules */
-    vmsg(NULL);
+
+    int b_lines_prev = b_lines;
+    for (;;)
+    {
+        vmsg_body(NULL);
+        int key = vkey();
+        switch (key)
+        {
+        default:
+            break;
+        case I_RESIZETERM:
+            move(b_lines_prev, 0);
+            clrtoeol();
+            b_lines_prev = b_lines;
+            continue;
+        case KEY_UP: case KEY_DOWN: case KEY_LEFT: case KEY_RIGHT:
+        case 'A': case 'B': case 'a': case 'b':
+            continue;
+        case KEY_KONAMI:
+            domenu(menu_siteinfo, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
+        }
+        break;
+    }
+
     return DL_RELEASE(0);
 }
