@@ -43,8 +43,8 @@
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #endif
 
-#define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
-#define BBSVERSION      "4D.20-X"                   /* 版本編號, 最多 <= 14 字 */
+#define BBSVERNAME      "DreamBBS-202X"                  /* 版本名稱 */
+#define BBSVERSION      "v2-Shiyuu"                   /* 版本編號, 最多 <= 14 字 */
 #define BBSVER_SUFFIX   ""                          /* A version string for the path suffix */
 #define BINARY_SUFFIX   "bin" BBSVER_SUFFIX "/"     /* todo: move it to global.h, or merge global.h to here */
 
