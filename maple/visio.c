@@ -2371,6 +2371,8 @@ int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
     return key;
 }
 
+typedef int KeyXFormer(int);
+
 typedef struct
 {
     int key;
@@ -2378,6 +2380,7 @@ typedef struct
     struct timeval tbeg;
     struct timeval tlast;
     const int *seq;
+    KeyXFormer *xform;
 } KeySeq;
 
 static const int key_seq_konami[] =
@@ -2387,17 +2390,9 @@ static const int key_seq_konami[] =
     'B', 'A', KEY_NONE,
 };
 
-static const int key_seq_konami_lower[] =
-{
-    KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN,
-    KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT,
-    'b', 'a', KEY_NONE,
-};
-
 static KeySeq key_seq[] =
 {
-    {KEY_KONAMI, 0, {0, 0}, {0, 0}, key_seq_konami},
-    {KEY_KONAMI, 0, {0, 0}, {0, 0}, key_seq_konami_lower},
+    {KEY_KONAMI, 0, {0, 0}, {0, 0}, key_seq_konami, toupper},
 };
 
 #define KEY_SEQ_TIMEOUT_MS 10000
@@ -2412,7 +2407,8 @@ static int key_seq_process(int key)
         timersub(&tnow, &p->tlast, &tdiff);
         if (1000 * tdiff.tv_sec + tdiff.tv_usec / 1000 > KEY_SEQ_TIMEOUT_MS)
             p->idx = 0;
-        if (p->seq[p->idx] == key)
+        int key_xformed = (p->xform) ? p->xform(key) : key;
+        if (p->seq[p->idx] == key_xformed)
         {
             if (p->idx == 0)
                 p->tbeg = tnow;
