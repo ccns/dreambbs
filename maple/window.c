@@ -448,6 +448,7 @@ popupmenu_ans2_redraw:
             }
             break;
         case I_RESIZETERM:
+        case KEY_SHIYUU:
             /* Screen size changed and redraw is needed */
             /* clear */
             scr_restore_keep(&old_screen_dark);

@@ -459,7 +459,7 @@ do_menu_redraw:
     while (1)  /* verit . user ¿ï¾Ü */
     {
         c = vkey();
-        if (c == I_RESIZETERM)
+        if (c == I_RESIZETERM || c == KEY_SHIYUU)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
@@ -717,6 +717,7 @@ popupmenu_ans_redraw:
                 }
                 break;
             case I_RESIZETERM:
+            case KEY_SHIYUU:
                 /* Screen size changed and redraw is needed */
                 /* clear */
                 scr_restore_keep(&old_screen);

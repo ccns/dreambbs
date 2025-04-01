@@ -289,6 +289,7 @@
 
 /* Key sequence */
 #define KEY_KONAMI      0x0573
+#define KEY_SHIYUU      0x0930
 
 /* Special key values */
 #define KEY_INVALID     0x03FE

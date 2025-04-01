@@ -1925,7 +1925,7 @@ xover_key(
     if (!xo)
         return XO_NONE;
 
-    if (cmd == I_RESIZETERM)
+    if (cmd == I_RESIZETERM || cmd == KEY_SHIYUU)
     {
         /* IID.2021-02-26: Keep the cursor on screen when the screen is shrunk */
         if (pos > xo->top + XO_TALL - 1)

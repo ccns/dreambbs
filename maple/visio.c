@@ -1472,6 +1472,7 @@ vmsg_xo(
         case I_RESIZETERM:
             break;
         case KEY_KONAMI:
+        case KEY_SHIYUU:
             xover_key(xo, 0, res_key); // invoke only general key functions
         }
         move(b_lines_prev, 0);
@@ -2390,9 +2391,17 @@ static const int key_seq_konami[] =
     'B', 'A', KEY_NONE,
 };
 
+static const int key_seq_shiyuu[] =
+{
+    KEY_RIGHT, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_DOWN,
+    KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT, KEY_UP,
+    'C', 'C', KEY_NONE,
+};
+
 static KeySeq key_seq[] =
 {
     {KEY_KONAMI, 0, {0, 0}, {0, 0}, key_seq_konami, toupper},
+    {KEY_SHIYUU, 0, {0, 0}, {0, 0}, key_seq_shiyuu, toupper},
 };
 
 #define KEY_SEQ_TIMEOUT_MS 10000
@@ -2438,6 +2447,15 @@ vkey(void)
     {
         const int key = unget_key;
         unget_key = KEY_NONE;
+
+        switch (key) {
+        case KEY_SHIYUU:
+#ifdef M3_USE_PFTERM
+            if (!themeset(themeget() + 1))
+                themeset(0);
+#endif
+            break;
+        }
         return key;
     }
 
@@ -2832,7 +2850,7 @@ vget_redraw:
             move(y, x + col);
 
         ch = vkey();
-        if (ch == I_RESIZETERM || ch == KEY_KONAMI)
+        if (ch == I_RESIZETERM || ch == KEY_KONAMI || ch == KEY_SHIYUU)
         {
             if (ch != I_RESIZETERM)
                 xover_key(xo, 0, ch); // invoke only general key functions

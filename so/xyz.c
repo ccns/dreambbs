@@ -83,6 +83,7 @@ x_siteinfo(void)
     getloadavg(load, 3);
     load_norm = load[0] / ((nproc > 0) ? nproc : 2);
 
+redraw:
     clear();
 
     move(1, 0);
@@ -144,6 +145,8 @@ x_siteinfo(void)
         {
         default:
             break;
+        case KEY_SHIYUU:
+            goto redraw;
         case I_RESIZETERM:
             move(b_lines_prev, 0);
             clrtoeol();
