@@ -24,10 +24,11 @@
 #define t_columns  ((void)0, b_cols  + 1)
 
 #ifdef M3_USE_PFTERM
-// filed color   (defined in theme.h)
-#define STANDOUT() (void) ( attrsetbg(FILEDBG), attrsetfg(FILEDFG) )
-// default color (\x1b[37; 40m)
-#define STANDEND() (void) ( attrsetbg(0), attrsetfg(7) )
+// IID(2025-04-01): These were defined with fixed colors but did not work with bright mode
+// filed color
+#define STANDOUT() (void) ( addstr("\x1b[27;7m") )
+// default color
+#define STANDEND() (void) ( addstr("\x1b[27m") )
 #endif  /* #ifdef M3_USE_PFTERM */
 int cur_row, cur_col;           /* Current position without ANSI codes (display coordination) */
 int cur_pos;                    /* current column position with ANSI codes (raw character coordination) */
