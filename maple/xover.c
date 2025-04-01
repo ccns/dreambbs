@@ -1908,7 +1908,9 @@ int xover_resize(XO *xo)
         if (xo->pos[xo->cur_idx] > xo->top + XO_TALL - 1)
             xo->top += xo->pos[xo->cur_idx] - (xo->top + XO_TALL - 1);
         cmd = xover_exec_cb(xo, XO_HEAD);
-        cursor_show(xo, 3 + xo->pos[xo->cur_idx] - xo->top, 0, xo->pos[xo->cur_idx]);
+        if (xo->max > 0) {
+            cursor_show(xo, 3 + xo->pos[xo->cur_idx] - xo->top, 0, xo->pos[xo->cur_idx]);
+        }
     }
     return cmd;
 }
