@@ -261,10 +261,17 @@ static int vkey_is_typeahead(void)
 #define FTSZ_MIN_COL     80
 #define FTSZ_MAX_COL     320
 
+#define FTTHEME_DARK     0
+#define FTTHEME_BRIGHT   1
+
+#define FTATTR_DEFAULT        0x07
+#define FTATTR_DEFAULT_DARK   0x07
+#define FTATTR_DEFAULT_BRIGHT 0x70
+#define FTATTR_DEFAULT_THEME  (ftattr)((ft.theme == FTTHEME_BRIGHT) ? FTATTR_DEFAULT_BRIGHT : FTATTR_DEFAULT_DARK)
 #define FTCHAR_ERASE     ' '
-#define FTATTR_ERASE     0x07
+#define FTATTR_ERASE          FTATTR_DEFAULT
+#define FTATTR_ERASE_THEME    FTATTR_DEFAULT_THEME
 #define FTCHAR_BLANK     ' '
-#define FTATTR_DEFAULT   FTATTR_ERASE
 #define FTCHAR_INVALID_DBCS '?'
 // #define FTATTR_TRANSPARENT 0x80
 #define FTCATTR_DEFAULT  0x00
@@ -296,6 +303,7 @@ static int vkey_is_typeahead(void)
 typedef unsigned char ftchar;   // primitive character type
 typedef unsigned char ftattr;   // primitive attribute type
 typedef unsigned char ftcattr;  // primitive type for cursor attributes
+typedef unsigned char fttheme;  // primitive type for dark/bright mode
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Structure
@@ -307,6 +315,7 @@ typedef struct
     ftattr  **amap[2];      // attribute map
     ftchar  *dmap;          // dirty map
     ftchar  *dcmap;         // processed display map
+    fttheme theme;          // dark/bright mode
     ftattr  attr;
     int     rows, cols;
     int     y, x;
@@ -359,6 +368,8 @@ static FlatTerm ft;
 #define FTATTR_BLINK    0x80
 #define FTATTR_DEFAULT_FG   (FTATTR_GETFG(FTATTR_DEFAULT))
 #define FTATTR_DEFAULT_BG   (FTATTR_GETBG(FTATTR_DEFAULT))
+#define FTATTR_DEFAULT_FG_THEME (FTATTR_GETFG(FTATTR_DEFAULT_THEME))
+#define FTATTR_DEFAULT_BG_THEME (FTATTR_GETBG(FTATTR_DEFAULT_THEME))
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
@@ -438,12 +449,16 @@ void    attrset     (ftattr attr);
 void    attrsetfg   (ftattr attr);
 void    attrsetbg   (ftattr attr);
 
+// theme
+fttheme themeget    (void);
+bool    themeset    (fttheme);
+
 // cursor
 void    getyx       (int *y, int *x);
 void    getmaxyx    (int *y, int *x);
 void    move        (int y, int x);
 
-// clear
+// clear (filled with theme default colors)
 void    clear       (void); // clrscr + move(0, 0)
 void    clrtoeol    (void); // end of line
 void    clrtobot    (void);
@@ -453,6 +468,7 @@ void    clrcurln    (void); // whole line
 void    clrtobeg    (void); // begin of line
 void    clrtohome   (void);
 void    clrscr      (void); // clear and keep cursor untouched
+void    clrscrraw   (void); // fill with terminal default colors
 void    clrregion   (int r1, int r2); // clear [r1, r2], bi-directional.
 
 // window control
@@ -557,8 +573,8 @@ initscr(void)
     resizeterm(FTSZ_DEFAULT_ROW, FTSZ_DEFAULT_COL);
 
     // clear both pages
-    ft.mi = 0; clrscr();
-    ft.mi = 1; clrscr();
+    ft.mi = 0; clrscrraw();
+    ft.mi = 1; clrscrraw();
     ft.mi = 0;
 
     // typeahead
@@ -566,6 +582,9 @@ initscr(void)
 
     fterm_rawclear();
     move(0, 0);
+
+    if (FTATTR_DEFAULT_THEME != FTATTR_DEFAULT)
+        redrawwin();
 }
 
 int
@@ -669,7 +688,7 @@ resizeterm(int rows, int cols)
     {
         memset(FTCMAP[i], FTCHAR_ERASE,
                 (cols) * sizeof(ftchar));
-        memset(FTAMAP[i], FTATTR_ERASE,
+        memset(FTAMAP[i], FTATTR_ERASE_THEME,
                 (cols) * sizeof(ftattr));
     }
     if (cols > ft.cols)
@@ -678,7 +697,7 @@ resizeterm(int rows, int cols)
         {
             memset(FTCMAP[i]+ft.cols, FTCHAR_ERASE,
                     (cols-ft.cols) * sizeof(ftchar));
-            memset(FTAMAP[i]+ft.cols, FTATTR_ERASE,
+            memset(FTAMAP[i]+ft.cols, FTATTR_ERASE_THEME,
                     (cols-ft.cols) * sizeof(ftattr));
         }
     }
@@ -748,17 +767,45 @@ attrsetbg(ftattr attr)
     ft.attr |= ((attr << FTATTR_BGSHIFT) & FTATTR_BGMASK);
 }
 
+// theme
+fttheme themeget(void)
+{
+    return ft.theme;
+}
+
+bool themeset(fttheme theme)
+{
+    if (!(theme >= FTTHEME_DARK && theme <= FTTHEME_BRIGHT))
+        return false;
+    ft.theme = theme;
+
+    redrawwin();
+    return true;
+}
+
 // clear
 
-void
-clrscr(void)
+static void
+clrscr_with_attr(ftattr attr)
 {
     int r;
     for (r = 0; r < ft.rows; r++)
         memset(FTCMAP[r], FTCHAR_ERASE, ft.cols * sizeof(ftchar));
     for (r = 0; r < ft.rows; r++)
-        memset(FTAMAP[r], FTATTR_ERASE, ft.cols * sizeof(ftattr));
+        memset(FTAMAP[r], attr, ft.cols * sizeof(ftattr));
     fterm_markdirty();
+}
+
+void
+clrscrraw(void)
+{
+    clrscr_with_attr(FTATTR_ERASE);
+}
+
+void
+clrscr(void)
+{
+    clrscr_with_attr(FTATTR_ERASE_THEME);
 }
 
 void
@@ -774,7 +821,7 @@ clrtoeol(void)
     ft.x = ranged(ft.x, 0, ft.cols-1);
     ft.y = ranged(ft.y, 0, ft.rows-1);
     memset(FTPC, FTCHAR_ERASE,  ft.cols - ft.x);
-    memset(FTPA, FTATTR_ERASE,  ft.cols - ft.x);
+    memset(FTPA, FTATTR_ERASE_THEME,  ft.cols - ft.x);
     fterm_markdirty();
 }
 
@@ -784,7 +831,7 @@ clrtobeg(void)
     ft.x = ranged(ft.x, 0, ft.cols-1);
     ft.y = ranged(ft.y, 0, ft.rows-1);
     memset(FTCROW, FTCHAR_ERASE, ft.x+1);
-    memset(FTAROW, FTATTR_ERASE, ft.x+1);
+    memset(FTAROW, FTATTR_ERASE_THEME, ft.x+1);
     fterm_markdirty();
 }
 
@@ -793,7 +840,7 @@ clrcurrline(void)
 {
     ft.y = ranged(ft.y, 0, ft.rows-1);
     memset(FTCROW, FTCHAR_ERASE, ft.cols);
-    memset(FTAROW, FTATTR_ERASE, ft.cols);
+    memset(FTAROW, FTATTR_ERASE_THEME, ft.cols);
     fterm_markdirty();
 }
 
@@ -822,7 +869,7 @@ clrregion(int r1, int r2)
     for (; r1 <= r2; r1++)
     {
         memset(FTCMAP[r1], FTCHAR_ERASE, ft.cols);
-        memset(FTAMAP[r1], FTATTR_ERASE, ft.cols);
+        memset(FTAMAP[r1], FTATTR_ERASE_THEME, ft.cols);
     }
     fterm_markdirty();
 }
@@ -875,7 +922,7 @@ redrawwin(void)
 {
     // flip page
     fterm_flippage();
-    clrscr();
+    clrscrraw();
 
     // clear raw terminal
     fterm_rawclear();
@@ -1878,7 +1925,7 @@ fterm_exec(void)
             else switch (n)
             {
             case 0:
-                attrset(FTATTR_DEFAULT);
+                attrset(FTATTR_DEFAULT_THEME);
                 ft.cattr = FTCATTR_DEFAULT;
                 break;
             case 1:
@@ -1914,10 +1961,10 @@ fterm_exec(void)
                 ft.cattr &= ~FTCATTR_CONCEAL;
                 break;
             case 39:
-                attrsetfg(FTATTR_DEFAULT_FG);
+                attrsetfg(FTATTR_DEFAULT_FG_THEME);
                 break;
             case 49:
-                attrsetbg(FTATTR_DEFAULT_BG);
+                attrsetbg(FTATTR_DEFAULT_BG_THEME);
                 break;
             case 38:
             case 48:
@@ -2269,7 +2316,7 @@ fterm_rawclreol(void)
     // XXX If we skip with "background only" here, future updating
     // may get wrong attributes. Or not? (consider DBCS...)
     // if (FTATTR_GETBG(oattr) != FTATTR_GETBG(FTATTR_ERASE))
-    fterm_rawattr(FTATTR_ERASE);
+    fterm_rawattr(FTATTR_ERASE_THEME);
 #endif
 
     // EL: CSI n K, n = 0
@@ -2521,7 +2568,7 @@ fterm_rawnc(int c, int n)
 void
 grayoutrect(int y, int yend, int x, int xend, int level)
 {
-    char grattr = FTATTR_DEFAULT;
+    char grattr = FTATTR_DEFAULT_THEME;
     int rx;
 
     y    = ranged(y,   0, ft.rows-1);

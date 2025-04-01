@@ -5,7 +5,11 @@
 // Flat Terminal Data Type
 //////////////////////////////////////////////////////////////////////////
 
+#define FTTHEME_DARK     0
+#define FTTHEME_BRIGHT   1
+
 typedef unsigned char ftattr;   // primitive attribute type
+typedef unsigned char fttheme;  // primitive type for dark/bright mode
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,12 +32,16 @@ void    attrset     (ftattr attr);
 void    attrsetfg   (ftattr attr);
 void    attrsetbg   (ftattr attr);
 
+// theme
+fttheme themeget    (void);
+bool    themeset    (fttheme);
+
 // cursor
 void    getyx       (int *y, int *x);
 void    getmaxyx    (int *y, int *x);
 void    move        (int y, int x);
 
-// clear
+// clear (filled with theme default colors)
 void    clear       (void);             // clrscr + move(0, 0)
 void    clrtoeol    (void);             // end of line
 void    clrtobot    (void);
@@ -43,6 +51,7 @@ void    clrcurln    (void);             // whole line
 void    clrtobeg    (void);             // begin of line
 void    clrtohome   (void);
 void    clrscr      (void);             // clear and keep cursor untouched
+void    clrscrraw   (void);             // fill with terminal default colors
 void    clrregion   (int r1, int r2);   // clear [r1, r2], bi-directional.
 
 // window control
