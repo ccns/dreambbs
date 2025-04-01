@@ -647,7 +647,7 @@ GCC_NONNULLS static int tn_login_redo(XO *xo, int cmd)
     if (cmd & XR_PART_HEAD)
     {
         clear();
-        prints( MYHOSTNAME " ¡ó " OWNER " ¡ó " BBSIP " [" BBSVERNAME " " BBSVERSION "]");
+        prints("\x1b[m" MYHOSTNAME " ¡ó " OWNER " ¡ó " BBSIP " [" BBSVERNAME " " BBSVERSION "]");
     }
 
     if (cmd & XR_PART_NECK) {
