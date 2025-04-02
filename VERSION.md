@@ -142,7 +142,7 @@ Unlike previous releases, dedicated branches are created per minor version for t
   - [`v2.0.0-artoria`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0)
     - Features in plan:
       - [x] Option for disabling DSO.
-      - [ ] BBS-Lua/BBS-Ruby.
+      - [x] BBS-Lua/BBS-Ruby. (Delayed to `v2.1`)
       - [x] SHA-256-encrypted password support.
       - [x] Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.
 - [`v2.1`](https://github.com/ccns/dreambbs/tree/v2.1-gilgamesh) (never diverged from CURRENT)
@@ -167,10 +167,10 @@ All the previous branches have become end-of-life when `v3.0` was released.
   - [x] Server-side DBCS character detection
 - [x] [`v3.0.1`/`202X v0.1`](https://github.com/ccns/dreambbs/releases/tag/v3.0.1)
   - [x] Improved high resolution login stat chart
-- [ ] `v3.1`/`3D-AO.21.1-VRMiliO` (**Testing**)
-  - [ ] Remove logout option from the main menu
-    - This option is confirmed to be not necessary
-- [ ] `v3.2`
+- [x] `v3.1`/`3D-AO.21.1-VRMiliO` (released on `iid/develop`)
+  - [x] Provide an option to remove the logout option from the main menu
+- [ ] `v3.2`/`202X v2-Shiyuu` (**Testing**)
+  - [x] Initial support of color theme (dark/bright)
 - [ ] `v3.3`; planned to be the last release of `v3.X`
 
 Features in plan:
@@ -230,13 +230,16 @@ Sometimes, special editions are released on special events.
 ### April Fools' Day Event
 - [x] [`v4.20-alpha`](https://github.com/ccns/dreambbs/tree/v4.20-alpha) (2020) (Based on `v3.0-CURRENT`)
     - The main menu and the popup menu are movable
-    - Every items in the main menu have a verbose explanation
+    - Every item in the main menu has a verbose explanation
 - [x] [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (2021) (Based on `v3.0`/`202X v0`)
     - The main menu and the Xover list have 2 cursors
     - The main menu and the popup menu are movable again
 - [x] [`v4.20-rc.0`](https://github.com/ccns/dreambbs/tree/v4.20-rc.0) (Based on `v3.1-rc.1`/`202X v1-rc.1`)
-    - All the previous v4.20 features are back.
+    - All the previous v4.20 features are back (except for main menu explanations).
     - The popup menu also has 2 cursors.
+    - Planned to be integrated into `master` branch.
+- [x] [`v4.20-X`](https://github.com/ccns/dreambbs/tree/v4.20-X) (Based on `v4.20-rc.0`)
+    - Make displayed site name randomly selected from a list if defined
 
 ## TODO
 - Features from PttBBS to port and test:
