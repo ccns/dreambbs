@@ -56,7 +56,7 @@ If you have cloned this repository, you can also find the wiki contents on the b
       Developed by Hung-Te Lin (piaip) et al.
     * `pfterm.c`: The optional module *pfterm* (piaip's flat terminal system), BSD-like custom license.
       Developed by Hung-Te Lin (piaip) et al.
-    * Installed to `$BBSHOME/bin/`
+    * Installed to `${BBSHOME}/bin/`
 
 * `so/`: The shared libraries. Containing less frequently used modules.
     * `bbslua.c`: The optional module *BBS-Lua*, MIT license (Expat).
@@ -65,14 +65,14 @@ If you have cloned this repository, you can also find the wiki contents on the b
       Developed by Mike Pall et al.
     * `bbsruby.c`: The optional module *BBS-Ruby*, MIT license (Expat).
       Developed by Hung-Te Lin (piaip) et al.
-    * Installed to `$BBSHOME/bin/` if allowed to be compiled into shared libraries.
+    * Installed to `${BBSHOME}/bin/` if allowed to be compiled into shared libraries.
 
 * `util/`: Helper programs. Containing programs to be run periodly by [cron](https://en.wikipedia.org/wiki/Cron).
 
 * `scripts/`: Helper scripts and templates. Containing `wsproxy`.
     * `wsproxy/`: *wsproxy*, a Telnet-over-WebSocket server script for OpenResty, MIT license (Expat).
       Developed by Robert Wang (robertabcd) et al.
-    * Installed to `$BBSHOME/sh/`
+    * Installed to `${BBSHOME}/sh/`
 
 * `test/`: Test programs and scripts. Used for verifying the build.
 
