@@ -22,6 +22,19 @@ include(CheckCCompilerFlag)
 include(CheckSymbolExists)
 include(FindPkgConfig)
 
+#
+
+set(CMAKE_REQUIRED_INCLUDES "string.h")
+check_symbol_exists(strlcpy "string.h" HAVE_STRLCPY)
+check_symbol_exists(strlcat "string.h" HAVE_STRLCAT)
+
+if (HAVE_STRLCPY)
+  add_definitions(-DHAVE_STRLCPY=1)
+endif()
+if (HAVE_STRLCAT)
+  add_definitions(-DHAVE_STRLCAT=1)
+endif()
+
 ## Toolchain settings
 
 if(NOT USE_CXX)

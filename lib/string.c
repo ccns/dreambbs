@@ -1046,6 +1046,7 @@ void str_xor(char *dst GCC_NONSTRING, /* Thor.990409: 任意長度任意binary seq, 至
     }
 }
 
+#ifndef HAVE_STRLCAT
 /* strlcat based on OpenBSDs strlcat */
 
 /*
@@ -1070,7 +1071,9 @@ size_t strlcat(char *dst, const char *src, size_t siz)
 
     return dlen + slen + strlen(src + slen); /* count does not include NUL */
 }
+#endif
 
+#ifndef HAVE_STRLCPY
 /* strlcpy based on OpenBSDs strlcpy */
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters
@@ -1096,3 +1099,4 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
 
     return slen + strlen(src + slen); /* count does not include NUL */
 }
+#endif

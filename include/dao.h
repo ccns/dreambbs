@@ -189,8 +189,12 @@ GCC_NONNULLS void str_rtrim(char *buf);
 GCC_NONNULL(1) GCC_RET_NONNULL char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode);
 GCC_NONNULLS GCC_PURE GCC_RET_NONNULL char *str_ttl(const char *title);
 GCC_NONNULLS void str_xor(char *dst GCC_NONSTRING, const char *src);
+#ifndef HAVE_STRLCAT
 GCC_NONNULLS size_t strlcat(char *dst, const char *src, size_t siz);
+#endif
+#ifndef HAVE_STRLCPY
 GCC_NONNULLS size_t strlcpy(char *dst, const char *src, size_t siz);
+#endif
 /* date.c */
 void str_stamp(char *str, const time_t *chrono);
 char *Btime(const time_t *clock);
