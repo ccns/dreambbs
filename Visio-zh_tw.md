@@ -108,7 +108,8 @@ DreamBBS v3.1 引進。在 10 秒內依序且連續輸入一組按鍵，最後�
 
 Macro | 值 | 按鍵組合 | 用途 | 出處 | 註解
  --- | --- | --- | --- | --- | ---
-`KEY_KONAMI` | `0x0573` | - <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> <br> - <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>b</kbd> <kbd>a</kbd> |  - 開關「雙游標操作模式」 <br> (DreamBBS 4D-AO.20) | DreamBBS 4D-AO.20 | [KONAMI 祕技](https://zh.wikipedia.org/zh-tw/科乐美秘技)
+`KEY_KONAMI` | `0x0573` | - <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> <br> - <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>b</kbd> <kbd>a</kbd> <br> - (不分大小寫) (DreamBBS v3.2) |  - 開關「雙游標操作模式」 <br> (DreamBBS 4D-AO.20) | DreamBBS 4D-AO.20 | [KONAMI 祕技](https://zh.wikipedia.org/zh-tw/科乐美秘技)
+`KEY_SHIYUU` | `0x0930` | <kbd>→</kbd> <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>C</kbd> <kbd>C</kbd> <br> (不分大小寫) | - 開關「明亮模式」 <br> (DreamBBS v3.2) | DreamBBS v3.2 | <kbd>→</kbd>/<kbd>↑</kbd> = 1, <kbd>←</kbd>/<kbd>↓</kbd> = 0 → `0b1_11110_0101_1` = 1995, <br> `0b11110` = 30, <br> CC → **CC**NS, <br> 09-30: CCNS VTuber 企畫：白悠千織初配信日
 
 ## Vget 輸入框函式
 
