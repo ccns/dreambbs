@@ -167,9 +167,9 @@ All the previous branches have become end-of-life when `v3.0` was released.
   - [x] Server-side DBCS character detection
 - [x] [`v3.0.1`/`202X v0.1`](https://github.com/ccns/dreambbs/releases/tag/v3.0.1)
   - [x] Improved high resolution login stat chart
-- [x] `v3.1`/`3D-AO.21.1-VRMiliO` (released on `iid/develop`)
+- [x] [`v3.1`/`3D-AO.21.1-VRMiliO`](https://github.com/ccns/dreambbs/releases/tag/v3.1.0) (released on `iid/develop`)
   - [x] Provide an option to remove the logout option from the main menu
-- [ ] `v3.2`/`202X v2-Shiyuu` (**Testing**)
+- [x] [`v3.2`/`202X v2-Shiyuu`](https://github.com/ccns/dreambbs/releases/tag/v3.2.0) (released on `iid/develop`)
   - [x] Initial support of color theme (dark/bright)
 - [ ] `v3.3`; planned to be the last release of `v3.X`
 
@@ -228,18 +228,23 @@ From v3.0 and on, a new release will be published soon instead. For less signifi
 Sometimes, special editions are released on special events.
 
 ### April Fools' Day Event
-- [x] [`v4.20-alpha`](https://github.com/ccns/dreambbs/tree/v4.20-alpha) (2020) (Based on `v3.0-CURRENT`)
+- [x] 2020: [`v4.20-alpha`](https://github.com/ccns/dreambbs/tree/v4.20-alpha) (Based on `v3.0-CURRENT`)
     - The main menu and the popup menu are movable
     - Every item in the main menu has a verbose explanation
-- [x] [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (2021) (Based on `v3.0`/`202X v0`)
+- [x] 2021: [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (Based on `v3.0`/`202X v0`)
     - The main menu and the Xover list have 2 cursors
     - The main menu and the popup menu are movable again
-- [x] [`v4.20-rc.0`](https://github.com/ccns/dreambbs/tree/v4.20-rc.0) (Based on `v3.1-rc.1`/`202X v1-rc.1`)
+- [x] 2022: [`v4.20-rc.0`](https://github.com/ccns/dreambbs/tree/v4.20-rc.0) (Based on `v3.1-rc.1`/`202X v1-rc.1`)
     - All the previous v4.20 features are back (except for main menu explanations).
     - The popup menu also has 2 cursors.
     - Planned to be integrated into `master` branch.
-- [x] [`v4.20-X`](https://github.com/ccns/dreambbs/tree/v4.20-X) (Based on `v4.20-rc.0`)
+- [x] 2023: [`v4.20-DAO`](https://github.com/ccns/dreambbs/tree/v4.20-DAO) (`4D-AO.20`) (Based on `v3.1` and `v4.20-rc.0`)
+    - All the previous v4.20 features are now disabled by default and can be toggled with `KEY_KONAMI`.
+- [x] 2024: [`v4.20-X`](https://github.com/ccns/dreambbs/tree/v4.20-X) (Based on `v4.20-DAO`)
     - Make displayed site name randomly selected from a list if defined
+- [x] 2025: [`v3.2.0`](https://github.com/ccns/dreambbs/tree/v3.2.0) (Based on `v4.20-X`)
+    - All the previous v4.20 features are incorporated into the regular release.
+    - The new experimental bright mode can be toggled with `KEY_SHIYUU`.
 
 ## TODO
 - Features from PttBBS to port and test:
