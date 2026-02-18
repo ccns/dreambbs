@@ -31,8 +31,7 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 - `git`
 - `make`
 - `cmake`
-- `gcc`/`clang`
-- `g++`/`clang++`
+- `gcc`/`clang` 或 `g++`/`clang++`，擇一即可
 
 若要使用 `bbs-sshd`，編譯 `bbs-sshd` 前須安裝：
 
@@ -49,13 +48,17 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 
 ### 帳號 `bbs` 的設定
 
-#### 方式：一行命令
+**== 以下請在有 sudo 權限的帳號操作 !! ==**
 
-在 v3.0 以後的版本，以 root 權限執行 `useradd -m bbs` (使用者名稱可自訂) 即可完成設定。
+#### 方式：純命令
 
-在早於 v3.0 的版本下，可以 root 權限執行以下命令來完成設定：
-```
-groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
+在 v3.0 以後的版本，執行 `sudo useradd --create-home bbs`（帳號名可自訂）即可完成設定。
+
+在早於 v3.0 的版本，BBS 帳號的名稱與相關設定必須是特定值，可以執行以下命令來完成設定：
+
+```sh
+sudo groupadd --gid 99 bbs
+sudo useradd --create-home --gid bbs --shell /bin/bash --uid 9999 bbs
 ```
 
 #### 方式：手動設定
@@ -68,10 +71,10 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 首先編輯 `/etc/passwd` 來增加名為 `bbs` 的使用者：
 
-**== 以下用 root 權限 !! ==**
-
-    # mkdir /home/bbs
-    # vipw
+```sh
+sudo mkdir /home/bbs
+sudo vipw
+```
 
 若使用 Linux，可於進入編輯器後，在最後一行加上：
 
@@ -86,7 +89,9 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 (註：v2.0 以後的版本，不再假設群組名稱為 `bbs`，可自行取名)
 
-    # vigr
+```sh
+sudo vigr
+```
 
 在該檔最後一行加上：
 
@@ -99,18 +104,24 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 然後設定剛才增加的使用者 bbs (管理員) 的密碼：
 
-    # passwd bbs
+```sh
+sudo passwd bbs
+```
 
 記得將 bbs 的家目錄擁有者設定成 bbs 自己：
 
-    # chown -R bbs:bbs /home/bbs
+```sh
+sudo chown --recursive bbs:bbs /home/bbs
+```
 
 ### 帳號 `www-data` 的設定
 
 此外，如果要設定 `wsproxy`（見：[設定：透過 `wsproxy` 提供 WebSocket 連線](#設定透過-wsproxy-提供-WebSocket-連線
 )），還需再將建立的使用者加入 `www-data` (或其它適合的使用者群組) 以便使 BBS 主程式自動設定 UNIX socket 的權限。可執行以下命令：
 
-    $ usermod -a -G www-data bbs
+```sh
+sudo usermod --append --groups www-data bbs
+```
 
 主機帳戶部分設定完成！
 
@@ -119,51 +130,60 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 == 以下請登入 bbs 帳號後操作 ==
 
-    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs
+```sh
+cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs
+```
 
-預設將使用 `master` 版本。
-
-若要使用 `stable` 版本，可使用以下命令更新版本資訊並切換至該版本：
-
-    $ git fetch --tags origin stable; git checkout stable
-
-接著進去 dreambbs 主目錄。
+完成時會進入 dreambbs 主目錄。
 
 ## 4. 設定編譯相關檔案
 
 接著將範例裡的設定檔 `sample/dreambbs.conf` 複製到原始碼第一層主目錄裡，
 準備開始設定與編譯：
 
-    $ cp sample/dreambbs.conf ./
+```sh
+cp sample/dreambbs.conf ./
+```
 
 接著編輯 `dreambbs.conf` 檔案：
 
-    $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
+```sh
+vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
+```
 
 確定已安裝 `cmake` 套件後，請執行以下命令：
 
-    $ mkdir build/
-    $ cd build/
-    $ cmake ..
+```sh
+mkdir build/
+cd build/
+cmake ..
+```
 
 其中最後的 `cmake ..` 命令，也可參考以下命令調整，直接指定使用者資訊（未指定之選項將使用目前使用者的使用者資訊）（所列選項僅為範例，請自行斟酌是否合適）：
 
-    $ BBSUSR=bbs BBSGROUP=bbs WWWGROUP=www-data BBSHOME=/home/bbs cmake ..
+```sh
+BBSUSR=bbs BBSGROUP=bbs WWWGROUP=www-data BBSHOME=/home/bbs cmake ..
+```
 
-可檢查所產生的設定是否符合需求。
+在原始碼主目錄下（非 build 目錄）會產生以下設定檔，可檢查所產生的設定是否符合需求。如不合可直接編輯。
 
-產生出的設定檔為純文字形式，且會由 `cmake` 讀取作為預設設定。因此，若要在不同的專案原始碼目錄套用相同的 BBS 編譯設定，複製以下檔案至對應目錄即可：
 - `dreambbs.conf`
 - `make_export.conf`
 - `maple/make_export.conf`
 
+設定檔會由 `cmake` 讀取作為預設設定。因此，若要在不同的專案原始碼目錄套用相同的 BBS 編譯設定，複製以上檔案至對應目錄即可。
+
 此外，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下命令調整上述 `cmake ..` 命令（所列選項僅為範例，請自行斟酌是否合適）：
 
-    $ CC=gcc USE_CXX=1 cmake ..
+```sh
+CC=gcc USE_CXX=1 cmake ..
+```
 
 或是
 
-    $ cmake -DCMAKE_C_COMPILER=gcc -DUSE_CXX=ON ..
+```sh
+cmake -DCMAKE_C_COMPILER=gcc -DUSE_CXX=ON ..
+```
 
 ## 5. 確認 BBS 目錄架構配置
 
@@ -174,10 +194,12 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 或是尚未熟悉本版本 BBS 運作所必要的目錄結構，可參考 [dreambbs_snap](https://github.com/ccns/dreambbs_snap) 中的範例目錄。
 
 也可以透過執行以下命令來完成目錄結構的配置：
+
+```sh
+git clone https://github.com/ccns/dreambbs_snap.git
+cp -r dreambbs_snap/. /home/bbs
 ```
-git clone https://github.com/ccns/dreambbs_snap.git bbs
-cp -r bbs /home/
-```
+
 此範例目錄是使用 WindTopBBS-3.02-20040420-SNAP 的架構為基礎，加以修改而來的。
 （參考連結：https://github.com/bbsmirror/BBSmirror/blob/master/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz）
 
@@ -189,11 +211,13 @@ cp -r bbs /home/
 
 請在剛才所建立的 `build/` 目錄下，執行：
 
-    $ make all install
+```sh
+make all install
+```
 
 如果 `dreambbs.conf` 中的相關 macro 設定都有定義到，應該可以順利編譯完成。
 
-(註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何 macros，也可順利編譯完成並正常執行)
+(註：v2.0 以後的版本，`dreambbs.conf` 無須定義任何 macros 也可順利編譯完成並正常執行，但會套用預設的站臺資訊)
 
 如果要重新指定編譯器以及程式語言模式，請見前文：[設定編譯相關檔案](#4-設定編譯相關檔案)。
 
@@ -201,38 +225,50 @@ cp -r bbs /home/
 
 ### 設定：系統例行工作
 
-然後記得設定系統排程：
+然後記得設定系統排程。在 `build/` 目錄下（早於 v3.0 的版本請在原始碼主目錄下）執行：
 
-    $ crontab sample/crontab
+```sh
+crontab sample/crontab
+```
 
-(建議您自行檢視裡面的設定是否符合需求，以及視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
+(建議您自行檢視裡面的設定是否符合需求)
 
-(註：v3.0 以後的版本會在 `make` 時產生有正確路徑的 `crontab`，請到上述的 `build/` 目錄下執行該命令)
+(早於 v3.0 的版本，建議視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
 
 ### BBS 的執行
 
 至於設定 bbs 執行環境的部分：
 
-在啟動 bbsd 主程式前，請務必先執行相關程式，建立 SHM：
+在啟動 bbsd 主程式前，請務必先執行相關程式建立 SHM。v3.0 以後的版本可直接執行
 
-    $ /home/bbs/bin/camera
-    $ /home/bbs/bin/account
-    $ /home/bbs/bin/acpro
-    $ /home/bbs/bin/makefw
+```sh
+/home/bbs/sh/start.sh
+```
 
-(註：v2.1 以後的版本，將 `account` 中建立分類看板的工作移到了 `acpro` 中，不須執行 `account`)
+早於 v3.0 的版本，可參考 `scripts` 裡面的 `start.sh` 的內容去執行。
 
-或者是拿 `scripts` 裡面的 `start.sh` 這個 shell script 去執行。
+這兩個 scripts 都會去執行：
 
-(註：v3.0 以後的版本在使用 `make install` 安裝時，會將已產生正確路徑的此腳本安裝至 BBS 家目錄下的 `sh/start.sh`，可直接執行)
+```sh
+/home/bbs/bin/camera
+/home/bbs/bin/account
+/home/bbs/bin/acpro
+/home/bbs/bin/makefw
+```
 
-之後若要提供 port 23 的 telnet 連線的話，以 root 權限執行即可，如：
+(註：v2.1 以後的版本，將 `account` 中建立分類看板的工作移到了 `acpro` 中，`start.sh` 不再執行 `account`)
 
-    # /home/bbs/bin/bbsd 23
+之後若要提供包含 port 23 的 telnet 連線的話，請回到有 sudo 權限的帳號執行，如：
 
-若要提供連線的 port 編號 > 3000，則以 bbs 權限執行即可，如:
+```sh
+sudo /home/bbs/bin/bbsd 23
+```
 
-    $ /home/bbs/bin/bbsd 3456
+若要提供連線的所有 port 編號 > 3000，則繼續以 bbs 權限執行即可，如:
+
+```sh
+/home/bbs/bin/bbsd 3456
+```
 
 不加參數時，則會使用預設 port 設定。在 v3.0 後可執行 `bin/bbsd -?` 查看預設的 port 設定。
 
@@ -257,55 +293,64 @@ systemd=true
 
 在 v2.0 後的 `sample/` 下，提供了範例的 Systemd unit 設定檔。
 
-請參考 `sample/bbsd.service`，建立 `/etc/systemd/system/bbsd.service` 設定檔。
+可在 `build/` 目錄下（早於 v3.0 的版本請在原始碼主目錄下）找到範例 Systemd unit 設定檔。v3.0 以後的範例設定檔已代入正確的環境參數，可直接執行：
+
+```sh
+sudo cp sample/bbsd.service /etc/systemd/system/
+```
+
+早於 v3.0 的版本，請參考 `sample/bbsd.service`，建立 `/etc/systemd/system/bbsd.service` 設定檔。
 
 也可依需求，自行參考 `sample/` 下的其它 `*.service` 檔以建立對應的 Systemctl unit 設定檔。
 
-(註：v3.0 以後的版本會在 `make` 時產生已代入正確的環境參數的設定檔，可直接使用；請到上述的 `build/` 目錄下查看)
-
 #### 方法：`rc.local`
 
-在系統服務由 `systemd` 所管理的系統上，預設不會執行 `rc.local` 檔案。若仍要以此方法設定，請先以 root 權限執行以下命令，以在開機時啟動 `rc.local` 服務。
+在系統服務由 `systemd` 所管理的系統上，預設不會執行 `rc.local` 檔案。若仍要以此方法設定，請先以有 sudo 權限的帳號執行以下命令，以在開機時啟動 `rc.local` 服務。
 
-    # chmod +x /etc/rc.d/rc.local
-    # systemctl enable rc-local
+```sh
+sudo chmod +x /etc/rc.d/rc.local
+sudo systemctl enable rc-local
+```
 
 (註：在 CentOS 7/8 上，`/etc/rc.local` 是指向 `/etc/rc.d/rc.local` 的符號連結，或是說「檔案捷徑」。請依作業系統中的實際路徑調整以上命令。)
 
 如要立即啟動 `rc.local` 服務，可執行以下命令：
 
-    # systemctl start rc-local
-
-接著可參考 `sh/start.sh` 的內容，或自己建立 `/etc/rc.local` 檔案，寫進以下內容：
-
+```sh
+sudo systemctl start rc-local
 ```
+
+接著建立 `/etc/rc.local` 檔案。v3.0 以後的版本，請寫進以下內容：
+
+```sh
 #! /bin/sh
 # MapleBBS-WindTop-DreamBBS
 
-su bbs -c '/home/bbs/bin/camera'
-su bbs -c '/home/bbs/bin/account'
-su bbs -c '/home/bbs/bin/acpro'
-su bbs -c '/home/bbs/bin/makefw'
+sudo -u bbs /home/bbs/sh/start.sh
 ```
 
-v3.0 後也可改寫進以下內容：
-```
+早於 v3.0 的版本，請參考 `scripts/start.sh`，寫進以下內容：
+
+```sh
 #! /bin/sh
 # MapleBBS-WindTop-DreamBBS
 
-su bbs -c '/home/bbs/sh/start.sh'
+sudo -u bbs /home/bbs/bin/camera
+sudo -u bbs /home/bbs/bin/account
+sudo -u bbs /home/bbs/bin/acpro
+sudo -u bbs /home/bbs/bin/makefw
 ```
 
-(註：v2.1 後不需 `su bbs` 也可正常運作)
+(註：v2.1 後不需 `sudo -u bbs` 也可正常運作)
 
 並確認已將 `rc.local` 的權限設定為「可執行」(`+x`)（見以上說明）。
 
 如不使用 `xinetd`，而要直接以 standalone 模式啟動 BBS 主程式，請在 `/etc/rc.local` 中再加上：
 
-```
+```sh
 # 前略..
-su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
-/home/bbs/bin/bbsd 23                # port 23 請直接用 root 權限啟動
+sudo -u bbs /home/bbs/bin/bbsd 3456  # 大於3000的備用port可這樣設定
+/home/bbs/bin/bbsd 23                # port 23 請直接用 sudo 權限啟動
 ```
 
 ### 設定：`xinetd`
@@ -333,7 +378,9 @@ service telnet
 
 可透過以下命令啟動 BBS 主程式，以從某個 UNIX socket 監聽連線。
 
-    $ /home/bbs/bin/bbsd -u /home/bbs/run/bbsd.socket
+```sh
+/home/bbs/bin/bbsd -u /home/bbs/run/bbsd.socket
+```
 
 請先記住該 socket 的路徑（`/home/bbs/run/bbsd.socket`），後續設定時會使用到。
 
@@ -363,7 +410,9 @@ v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說�
 
 請選擇適當目錄（比如 `/home/bbs/`）並執行以下命令以取得 `bbs-sshd` 原始碼：
 
-    $ cd /home/bbs; git clone https://github.com/ptt/bbs-sshd.git; cd bbs-sshd
+```sh
+cd /home/bbs; git clone https://github.com/ptt/bbs-sshd.git; cd bbs-sshd
+```
 
 接著請參考該專案的 `README.md` 進行 `bbs-sshd` 的建置與設定。
 
@@ -371,8 +420,10 @@ v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說�
 
 其中，`host_key` 的部份，若要使用 `bbs` 賬號專用的 SSH 伺服器公／私鑰，可藉以下命令產生：
 
-    $ mkdir /home/bbs/etc/ssh/
-    $ ssh-keygen -A -f /home/bbs/
+```
+mkdir /home/bbs/etc/ssh/
+ssh-keygen -A -f /home/bbs/
+```
 
 並將對應的設定改為：
 ```
@@ -388,9 +439,11 @@ host_keys = [
 
 接著使用以下命令啟動 `bbs-sshd`（假設使用了 `cargo build --release` 進行建置）。
 
-    $ /home/bbs/bbs-sshd/target/release/bbs-sshd -f /home/bbs/bbs-sshd/bbs-sshd.toml
+```sh
+/home/bbs/bbs-sshd/target/release/bbs-sshd -f /home/bbs/bbs-sshd/bbs-sshd.toml
+```
 
-(如設定使用了編號 < 1024 的連接埠，則需要 root 權限)
+(如設定使用了編號 < 1024 的連接埠，則需要 sudo 權限)
 
 v3.1 時，新增了對應的 Systemd unit 設定檔，以在開機時自動啟動 `bbs-sshd`，請見：[方法：Systemd unit 設定檔](<#方法Systemd-unit-設定檔>)。
 
@@ -409,12 +462,16 @@ v3.1 時，新增了對應的 Systemd unit 設定檔，以在開機時自動啟�
 
 這裡的作法是先執行：
 
-    # firewall-cmd --zone=public --permanent --add-port=23/tcp
-    # firewall-cmd --zone=public --permanent --add-port=3456/tcp
+```sh
+sudo firewall-cmd --zone=public --permanent --add-port=23/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=3456/tcp
+```
 
 之後直接重新啟動：
 
-    # firewall-cmd --reload
+```sh
+sudo firewall-cmd --reload
+```
 
 即可完成相關防火牆設定。
 
